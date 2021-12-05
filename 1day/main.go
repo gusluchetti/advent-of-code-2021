@@ -24,7 +24,6 @@ func main() {
 		depthArray = append(depthArray, depth)
 	}
 
-	var counter = GetDepthIncreases(depthArray)
-
+	counter := GetDepthIncreases(depthArray)
 	fmt.Println("\n Number of times depth increased: " + strconv.Itoa(counter))
 }
