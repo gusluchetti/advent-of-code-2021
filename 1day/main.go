@@ -1,25 +1,18 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 )
 
 func main() {
-	file, err := os.Open("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	scanner := bufio.NewScanner(file)
-	
+	tokens := ReadInputAsTokens("input.txt")
 	var depthArray []int
-	for scanner.Scan() {
-		depth, err := strconv.Atoi(scanner.Text())
+	for _, token := range tokens {
+		depth, err := strconv.Atoi(token)
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 		}
 		depthArray = append(depthArray, depth)
 	}
