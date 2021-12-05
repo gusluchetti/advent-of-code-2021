@@ -26,4 +26,9 @@ func main() {
 
 	counter := GetDepthIncreases(depthArray)
 	fmt.Println("\n Number of times depth increased: " + strconv.Itoa(counter))
+
+	sectionsArray := GetSections(depthArray)
+	counter = GetDepthIncreases(sectionsArray)
+
+	fmt.Println("\n Number of times depth increased (on sections): " + strconv.Itoa(counter))
 }
