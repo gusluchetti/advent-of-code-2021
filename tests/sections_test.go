@@ -1,4 +1,4 @@
-package FirstDay
+package tests
 
 import (
 	"fmt"
