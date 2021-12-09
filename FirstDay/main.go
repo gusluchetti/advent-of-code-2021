@@ -1,11 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
-
-	Utils "github.com/gusluchetti/advent-of-code-2021/utils"
 )
 
 func GetDepthIncreases(depthArray []int) int {
@@ -29,7 +29,17 @@ func GetSections(depthArray []int) []int {
 }
 
 func main() {
-	tokens := Utils.ReadInputAsTokens("input.txt")
+	file, err := os.Open("input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	scanner := bufio.NewScanner(file)
+	
+	var tokens []string
+	for scanner.Scan() {
+		tokens = append(tokens, scanner.Text())
+	}
+	
 	var depthArray []int
 	for _, token := range tokens {
 		depth, err := strconv.Atoi(token)
