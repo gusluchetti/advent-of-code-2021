@@ -5,7 +5,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/gusluchetti/advent-of-code-2021/utils"
+	"github.com/gusluchetti/advent-of-code-2021/Utils"
 )
 
 func GetDepthIncreases(depthArray []int) int {
@@ -29,7 +29,7 @@ func GetSections(depthArray []int) []int {
 }
 
 func main() {
-	tokens := utils.ReadInputAsTokens("../resources/day1_input.txt")
+	tokens := Utils.ReadInputAsTokens("../resources/day1_input.txt")
 	var depthArray []int
 	for _, token := range tokens {
 		depth, err := strconv.Atoi(token)
