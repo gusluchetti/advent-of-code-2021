@@ -1,4 +1,4 @@
-package FirstDay
+package Main
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func GetSections(depthArray []int) []int {
 		return sectionsArray
 }
 
-func main() {
+func FirstDay() {
 	tokens := Utils.ReadInputAsTokens("../resources/day1_input.txt")
 	var depthArray []int
 	for _, token := range tokens {
