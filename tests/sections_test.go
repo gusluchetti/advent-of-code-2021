@@ -3,12 +3,14 @@ package Tests
 import (
 	"fmt"
 	"testing"
+
+	FirstDay "github.com/gusluchetti/advent-of-code-2021/FirstDay"
 )
 
 func TestSections (t * testing.T) {
 	testArray := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
-	sectionsArray := GetSections(testArray)
-	counter := GetDepthIncreases(sectionsArray)
+	sectionsArray := FirstDay.GetSections(testArray)
+	counter := FirstDay.GetDepthIncreases(sectionsArray)
 	fmt.Println(sectionsArray)
 	fmt.Println(counter)
 
