@@ -29,7 +29,7 @@ func GetSections(depthArray []int) []int {
 }
 
 func FirstDay() {
-	tokens := Utils.ReadInputAsTokens("../resources/day1_input.txt")
+	tokens := Utils.ReadInputAsTokens("Resources/day1_input.txt")
 	var depthArray []int
 	for _, token := range tokens {
 		depth, err := strconv.Atoi(token)
