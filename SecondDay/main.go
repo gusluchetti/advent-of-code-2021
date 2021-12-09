@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func SecondDay() {
+func main() {
 	coords := make([]int, 2)
 	fmt.Println(coords)
 }
