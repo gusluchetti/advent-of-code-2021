@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func ReturnCommands(tokens []string) []int{
+func ReturnMultipliedCommands(tokens []string) int{
 	commands := make([]int, 2)
 	for _, token := range tokens {
 		split := strings.Fields(token)
@@ -28,7 +28,7 @@ func ReturnCommands(tokens []string) []int{
 		}
 	}
 
-	return commands
+	return commands[0] * commands[1]
 }
 
 func main() {
@@ -43,6 +43,6 @@ func main() {
 		tokens = append(tokens, scanner.Text())
 	}
 	
-	commands := ReturnCommands(tokens)
-	fmt.Println(commands)
+	result := ReturnMultipliedCommands(tokens)
+	fmt.Println("X and Y coordinates combined: " + strconv.Itoa(result))
 }
