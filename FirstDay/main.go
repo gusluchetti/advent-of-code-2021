@@ -54,6 +54,5 @@ func main() {
 
 	sectionsArray := GetSections(depthArray)
 	counter = GetDepthIncreases(sectionsArray)
-
-	fmt.Println("\n Number of times depth increased (on sections): " + strconv.Itoa(counter))
+	fmt.Println("Number of times depth increased (on sections): " + strconv.Itoa(counter))
 }
