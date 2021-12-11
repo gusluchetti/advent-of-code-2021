@@ -43,7 +43,6 @@ func GetBoardsAndStates(tokens []string) ([][][]int, [][][]bool) {
 			}
 			lineNumber++
 		} else {
-			fmt.Printf("\nFinished board and state: %v, %v \n", board, state)
 			boards = append(boards, board)
 			states = append(states, state)
 			boardNumber++
@@ -58,7 +57,6 @@ func CheckBoardState(state [][]bool) bool {
 	victoryAchieved := true
 	for i, array := range state {
 		for j, single := range array {
-			fmt.Println(array)
 			length := len(array) - 1
 			half := length / 2
 			if (single) {
@@ -125,25 +123,26 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states[][][]bool) int {
 	
 	color.Blue("\nGame is about to start!")
 	for i, current := range drawnNumbers {
-		color.Cyan("\n#%d Number is %d", i, current)
+		color.Cyan("\n#%d Number is %d", i+1, current)
 		for b, board := range boards {
+			fmt.Printf("Current board [%v] has state: %v", board, states[b])
 			for y, array := range board {
 				for x, number := range array {
-					if number ==	current {
+					if number == current {
 						states[b][y][x] = true
 						timesFound++
+
+						// checking if this board won the game
+						if (CheckBoardState(states[b])) {
+							lastDrawnNumber = current
+							gameFinished = true
+							break
+						}
 					}				
 				}
 			}
-			// checking if that board won the game
-			if (CheckBoardState(states[b])) {
-				lastDrawnNumber = current
-				gameFinished = true
-				break
-			}
 		}
 		color.Cyan("That number was found %d times!", timesFound)
-
 		if (gameFinished) {
 			// todo: calculate score correctly
 			score = 10 * lastDrawnNumber
