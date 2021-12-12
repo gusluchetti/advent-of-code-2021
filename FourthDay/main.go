@@ -28,7 +28,7 @@ func GetBoardsAndStates(tokens []string) ([][][]int, [][][]bool) {
 	board := make([][]int, 5)
 	state := make([][]bool, 5)
 	lineNumber := 0
-	
+
 	for i := 2; i < len(tokens); i++ {
 		split := strings.Fields(tokens[i])
 		if len(split) == 5 {
@@ -42,7 +42,7 @@ func GetBoardsAndStates(tokens []string) ([][][]int, [][][]bool) {
 			}
 			lineNumber++
 		}
-		if (lineNumber == 5) {
+		if lineNumber == 5 {
 			boards = append(boards, board)
 			states = append(states, state)
 			lineNumber = 0
@@ -54,68 +54,48 @@ func GetBoardsAndStates(tokens []string) ([][][]int, [][][]bool) {
 	return boards, states
 }
 
-func CheckBoardState(state [][]bool) bool {
-	victoryAchieved := true
-	for i, array := range state {
-		for j, single := range array {
-			length := len(array) - 1
-			half := length / 2
-			if (single) {
-				// check if win might be diagonal
-				if (i == j && i + j == length) {
-					if ((i == half) || (i < half && j < half) || (i > half && j > half)) { // top left to bot right diag
-						for b := 0; b<=length; b++ {
-							y := 0
-							if (!state[y][b]) {
-								victoryAchieved = false
-								break
-							}
-							y++
-						}
-						if (victoryAchieved) {
-							return true
-						}
-					} else if (i == half){ // bot left to top right diag
-						for b := 0; b<=length; b++ {
-							y := length
-							if (!state[y][b]) {
-								victoryAchieved = false
-								break
-							}
-							y--
-						}
-						if (victoryAchieved) {
-							return true
-						}
-					}
-				}
-				// check for horizontal win
-				for _, n := range state[i] {
-					if (!n) {
-						victoryAchieved = false
-						break
-					}
-				}
-				if (victoryAchieved) {
-					return true
-				}
-				// check for vertical win
-				for _, m := range state {
-					if(!m[j]) {
-						victoryAchieved = false
-						break
-					}
-				}
-				if (victoryAchieved) {
-					return true
-				}
+func BoardHasWon(state [][]bool) bool {
+	victory := false
+	count := 0
+	// vertical check
+	for x := 0; x < len(state); x++ {
+		for y := 0; y < len(state); y++ {
+			if state[y][x] {
+				count++
 			}
 		}
+		if count == 5 {
+			victory = true
+			break
+		} else {
+			count = 0
+		}
 	}
-	return victoryAchieved
+	if victory {
+		return true
+	}
+
+	victory = false
+	count = 0
+	// horizontal check
+	for y := 0; y < len(state); y++ {
+		for x := 0; x < len(state); x++ {
+			if state[y][x] {
+				count++
+			}
+		}
+		if count == 5 {
+			victory = true
+			break
+		} else {
+			count = 0
+		}
+	}
+
+	return victory
 }
 
-func GameLoop(drawnNumbers []int, boards [][][]int, states[][][]bool) int {
+func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) int {
 	var lastDrawnNumber int
 	var boardIndex int
 	gameFinished := false
@@ -128,21 +108,18 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states[][][]bool) int {
 				for x, number := range array {
 					if number == current {
 						states[b][y][x] = true
-						PrintBoardWithHighlightedNumbers(board, states[b])
-						// checking if this board won the game
-						if (CheckBoardState(states[b])) {
+						if BoardHasWon(states[b]) {
 							color.Magenta("\nBoard %d won!!!", b+1)
+							PrintBoardWithHighlightedNumbers(board, states[b])
 							lastDrawnNumber = current
 							boardIndex = b
 							gameFinished = true
-							break
 						}
-					}				
+					}
 				}
 			}
 		}
-
-		if (gameFinished) {
+		if gameFinished {
 			score = GetWinningScore(boards[boardIndex], states[boardIndex], lastDrawnNumber)
 			break
 		}
@@ -155,19 +132,24 @@ func GetWinningScore(board [][]int, state [][]bool, lastDrawnNumber int) int {
 	score := 0
 	for i, array := range board {
 		for j, number := range array {
-			if (!state[i][j]) {
+			if !state[i][j] {
 				score += number
 			}
 		}
 	}
-	return score * lastDrawnNumber
+
+	fmt.Printf("\nSum of unmarked numbers is %d", score)
+	totalScore := score * lastDrawnNumber
+	fmt.Printf("\nFinal score is %d * %d = %d", score, lastDrawnNumber, totalScore)
+
+	return totalScore
 }
 
 func PrintBoardWithHighlightedNumbers(board [][]int, state [][]bool) {
 	for i, line := range board {
 		fmt.Print(color.WhiteString("["))
 		for j, number := range line {
-			if(state[i][j]) {
+			if state[i][j] {
 				color.Set(color.FgYellow)
 				fmt.Printf(" %02d ", number)
 				color.Unset()
@@ -176,7 +158,7 @@ func PrintBoardWithHighlightedNumbers(board [][]int, state [][]bool) {
 			}
 		}
 		fmt.Print(color.WhiteString("]\n"))
-	}	
+	}
 	fmt.Print("\n")
 }
 
