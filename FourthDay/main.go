@@ -28,7 +28,6 @@ func GetBoardsAndStates(tokens []string) ([][][]int, [][][]bool) {
 	board := make([][]int, 5)
 	state := make([][]bool, 5)
 	lineNumber := 0
-	boardNumber := 0
 	
 	for i := 2; i < len(tokens); i++ {
 		split := strings.Fields(tokens[i])
@@ -42,11 +41,13 @@ func GetBoardsAndStates(tokens []string) ([][][]int, [][][]bool) {
 				state[lineNumber][i] = false
 			}
 			lineNumber++
-		} else {
+		}
+		if (lineNumber == 5) {
 			boards = append(boards, board)
 			states = append(states, state)
-			boardNumber++
 			lineNumber = 0
+			board = make([][]int, 5)
+			state = make([][]bool, 5)
 		}
 	}
 
@@ -111,30 +112,28 @@ func CheckBoardState(state [][]bool) bool {
 			}
 		}
 	}
-
 	return victoryAchieved
 }
 
 func GameLoop(drawnNumbers []int, boards [][][]int, states[][][]bool) int {
 	var lastDrawnNumber int
-	var timesFound int
+	var boardIndex int
 	gameFinished := false
-	score := 0	
-	
-	color.Blue("\nGame is about to start!")
+	score := 0
+
 	for i, current := range drawnNumbers {
 		color.Cyan("\n#%d Number is %d", i+1, current)
 		for b, board := range boards {
-			fmt.Printf("Current board [%v] has state: %v", board, states[b])
 			for y, array := range board {
 				for x, number := range array {
 					if number == current {
 						states[b][y][x] = true
-						timesFound++
-
+						PrintBoardWithHighlightedNumbers(board, states[b])
 						// checking if this board won the game
 						if (CheckBoardState(states[b])) {
+							color.Magenta("\nBoard %d won!!!", b+1)
 							lastDrawnNumber = current
+							boardIndex = b
 							gameFinished = true
 							break
 						}
@@ -142,15 +141,43 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states[][][]bool) int {
 				}
 			}
 		}
-		color.Cyan("That number was found %d times!", timesFound)
+
 		if (gameFinished) {
-			// todo: calculate score correctly
-			score = 10 * lastDrawnNumber
+			score = GetWinningScore(boards[boardIndex], states[boardIndex], lastDrawnNumber)
 			break
 		}
 	}
 
 	return score
+}
+
+func GetWinningScore(board [][]int, state [][]bool, lastDrawnNumber int) int {
+	score := 0
+	for i, array := range board {
+		for j, number := range array {
+			if (!state[i][j]) {
+				score += number
+			}
+		}
+	}
+	return score * lastDrawnNumber
+}
+
+func PrintBoardWithHighlightedNumbers(board [][]int, state [][]bool) {
+	for i, line := range board {
+		fmt.Print(color.WhiteString("["))
+		for j, number := range line {
+			if(state[i][j]) {
+				color.Set(color.FgYellow)
+				fmt.Printf(" %02d ", number)
+				color.Unset()
+			} else {
+				fmt.Printf(" %02d ", number)
+			}
+		}
+		fmt.Print(color.WhiteString("]\n"))
+	}	
+	fmt.Print("\n")
 }
 
 func main() {
@@ -166,5 +193,5 @@ func main() {
 
 	boards, states := GetBoardsAndStates(tokens)
 	score := GameLoop(GetDrawnNumbers(tokens), boards, states)
-	fmt.Printf("Score for winning board was %d", score)
+	fmt.Printf("\nScore for winning board was %d", score)
 }
