@@ -95,14 +95,15 @@ func BoardHasWon(state [][]bool) bool {
 	return victory
 }
 
-func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) int {
+func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) (int, int) {
 	var lastDrawnNumber int
 	var boardIndex int
-	gameFinished := false
-	score := 0
+	count := 0
+	winnersMap := make(map[int]int, len(boards))
+	firstScore := 0
+	lastScore := 0
 
-	for i, current := range drawnNumbers {
-		color.Cyan("\n#%d Number is %d", i+1, current)
+	for _, current := range drawnNumbers {
 		for b, board := range boards {
 			for y, array := range board {
 				for x, number := range array {
@@ -113,22 +114,26 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) int {
 							PrintBoardWithHighlightedNumbers(board, states[b])
 							lastDrawnNumber = current
 							boardIndex = b
-							gameFinished = true
+							_, firstWin := winnersMap[0]
+							if !firstWin {
+								firstScore = GetTotalScore(boards[b], states[b], current)
+							}
+							winnersMap[count] = boardIndex
+							count++
 						}
 					}
 				}
 			}
 		}
-		if gameFinished {
-			score = GetWinningScore(boards[boardIndex], states[boardIndex], lastDrawnNumber)
-			break
-		}
 	}
 
-	return score
+	fmt.Println(winnersMap)
+	lastIndex := len(boards) - 1
+	lastScore = GetTotalScore(boards[lastIndex], states[lastIndex], lastDrawnNumber)
+	return firstScore, lastScore
 }
 
-func GetWinningScore(board [][]int, state [][]bool, lastDrawnNumber int) int {
+func GetTotalScore(board [][]int, state [][]bool, lastDrawnNumber int) int {
 	score := 0
 	for i, array := range board {
 		for j, number := range array {
@@ -173,7 +178,11 @@ func main() {
 		tokens = append(tokens, scanner.Text())
 	}
 
+	drawnNumbers := GetDrawnNumbers(tokens)
 	boards, states := GetBoardsAndStates(tokens)
-	score := GameLoop(GetDrawnNumbers(tokens), boards, states)
-	fmt.Printf("\nScore for winning board was %d", score)
+
+	firstWinScore, lastWinScore := GameLoop(drawnNumbers, boards, states)
+
+	fmt.Println("\nScore of first board to win is " + color.BlueString(strconv.Itoa(firstWinScore)))
+	fmt.Println("\nScore of last board to win is " + color.RedString(strconv.Itoa(lastWinScore)))
 }
