@@ -103,7 +103,10 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) (int, int
 	firstScore := 0
 	lastScore := 0
 
+numbers:
 	for _, current := range drawnNumbers {
+		color.Blue("\nDrawn number is %d", current)
+		fmt.Printf("Ignoring boards of index %v\n", winnersArray)
 	checkBoard:
 		for b, board := range boards {
 			// we should ignore boards that have already won
@@ -112,7 +115,6 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) (int, int
 					continue checkBoard
 				}
 			}
-			fmt.Printf("\nIgnoring boards of index %v\n", winnersArray)
 			for y, array := range board {
 				for x, number := range array {
 					if number == current {
@@ -125,6 +127,9 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) (int, int
 								firstScore = GetTotalScore(boards[b], states[b], current)
 							}
 							winnersArray = append(winnersArray, boardIndex)
+							if len(winnersArray) == len(boards) {
+								break numbers
+							}
 							count++
 						}
 					}
@@ -135,7 +140,7 @@ func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) (int, int
 	}
 
 	fmt.Printf("\nOrder of winner boards: %v", winnersArray)
-	lastIndex := winnersArray[len(boards) - 1]
+	lastIndex := winnersArray[len(boards)-1]
 	lastScore = GetTotalScore(boards[lastIndex], states[lastIndex], lastDrawnNumber)
 	return firstScore, lastScore
 }
