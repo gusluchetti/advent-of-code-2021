@@ -98,37 +98,44 @@ func BoardHasWon(state [][]bool) bool {
 func GameLoop(drawnNumbers []int, boards [][][]int, states [][][]bool) (int, int) {
 	var lastDrawnNumber int
 	var boardIndex int
+	var winnersArray []int
 	count := 0
-	winnersMap := make(map[int]int, len(boards))
 	firstScore := 0
 	lastScore := 0
 
 	for _, current := range drawnNumbers {
+	checkBoard:
 		for b, board := range boards {
+			// we should ignore boards that have already won
+			for _, bIndex := range winnersArray {
+				if b == bIndex {
+					continue checkBoard
+				}
+			}
+			fmt.Printf("\nIgnoring boards of index %v\n", winnersArray)
 			for y, array := range board {
 				for x, number := range array {
 					if number == current {
 						states[b][y][x] = true
 						if BoardHasWon(states[b]) {
 							color.Magenta("\nBoard %d won!!!", b+1)
-							PrintBoardWithHighlightedNumbers(board, states[b])
 							lastDrawnNumber = current
 							boardIndex = b
-							_, firstWin := winnersMap[0]
-							if !firstWin {
+							if len(winnersArray) == 0 {
 								firstScore = GetTotalScore(boards[b], states[b], current)
 							}
-							winnersMap[count] = boardIndex
+							winnersArray = append(winnersArray, boardIndex)
 							count++
 						}
 					}
 				}
 			}
+			PrintBoardWithHighlightedNumbers(board, states[b])
 		}
 	}
 
-	fmt.Println(winnersMap)
-	lastIndex := len(boards) - 1
+	fmt.Printf("\nOrder of winner boards: %v", winnersArray)
+	lastIndex := winnersArray[len(boards) - 1]
 	lastScore = GetTotalScore(boards[lastIndex], states[lastIndex], lastDrawnNumber)
 	return firstScore, lastScore
 }
@@ -145,7 +152,7 @@ func GetTotalScore(board [][]int, state [][]bool, lastDrawnNumber int) int {
 
 	fmt.Printf("\nSum of unmarked numbers is %d", score)
 	totalScore := score * lastDrawnNumber
-	fmt.Printf("\nFinal score is %d * %d = %d", score, lastDrawnNumber, totalScore)
+	fmt.Printf("\nFinal score is %d * %d = %d\n", score, lastDrawnNumber, totalScore)
 
 	return totalScore
 }
