@@ -28,48 +28,109 @@ func NumberOfOverlappingPoints(diagram [][]int) int {
 	return overlaps
 }
 
-func AddInputToDiagram(tokens []string, diagram [][]int) [][]int {
+func OrganizeCoordinates(first int, second int) (int, int) {
+	var start int
+	var end int
+
+	if first > second {
+		start = second
+		end = first
+	} else {
+		start = first
+		end = second
+	}
+
+	return start, end
+}
+
+func GetInstructions(first int, second int) string {
+	if first-second < 0 {
+		return "+"
+	} else if first-second > 0 {
+		return "-"
+	} else {
+		return "="
+	}
+}
+
+func ApplyInstructions(diagram [][]int, xInst string, yInst string, x1 int, x2 int, y1 int, y2 int) [][]int {
+	fmt.Printf("\nInstructions found: %s for X and %s for Y [%d, %d -> %d, %d]", xInst, yInst, x1, y1, x2, y2)
+	var start int
+	var end int
+	if (xInst == "-" || xInst == "+") && yInst == "=" { // horizontal
+		if xInst == "-" {
+			start = x2
+			end = x1
+		} else {
+			start = x1
+			end = x2
+		}
+		fmt.Printf("\nHorizontal line")
+		for i := start; i <= end; i++ {
+			diagram[y1][i]++
+		}
+	} else if (yInst == "-" || yInst == "+") && xInst == "=" { // vertical
+		if yInst == "-" {
+			start = y2
+			end = y1
+		} else {
+			start = y1
+			end = y2
+		}
+		fmt.Printf("\nVertical line")
+		for i := start; i <= end; i++ {
+			diagram[i][x1]++
+		}
+	} else if (xInst == "+" && yInst == "-") || (xInst == "-" && yInst == "+") { // bot left to top right
+		if xInst == "-" {
+			start = x2
+			end = x1
+			aux := y1
+			y1 = y2
+			y2 = aux
+		} else {
+			start = x1
+			end = x2
+		}
+		fmt.Printf("\nBot Left to Top Right Diagonal")
+		for i := start; i <= end; i++ {
+			diagram[y1][i]++
+			y1--
+		}
+	} else if (xInst == "+" && yInst == "+") || (xInst == "-" && yInst == "-") { // top left to bot right
+		if xInst == "-" {
+			start = x2
+			end = x1
+			aux := y1
+			y1 = y2
+			y2 = aux
+		} else {
+			start = x1
+			end = x2
+		}
+		fmt.Printf("\nTop left to Bot Right Diagonal")
+		for i := start; i <= end; i++ {
+			diagram[y1][i]++
+			y1++
+		}
+	}
+	fmt.Println("")
+	return diagram
+}
+
+func AddInputsToDiagram(tokens []string, diagram [][]int) [][]int {
 	for _, token := range tokens {
 		res := regexp.MustCompile(`\d+`)
 		n := res.FindAllString(token, -1)
-		var start int
-		var end int
-		// numbers[0], [1] ->  initial coordinates
-		// numbers[2], [3] -> final coordinates
-		if n[1] == n[3] { // horizontal line
-			baseY, _ := strconv.Atoi(n[1])
-			first, _ := strconv.Atoi(n[0])
-			second, _ := strconv.Atoi(n[2])
-			if first > second {
-				start = second
-				end = first
-			} else {
-				start = first
-				end = second
-			}
-			for x := start; x <= end; x++ {
-				diagram[baseY][x]++
-			}
-		} else if n[0] == n[2] { // vertical line
-			baseX, _ := strconv.Atoi(n[0])
-			first, _ := strconv.Atoi(n[1])
-			second, _ := strconv.Atoi(n[3])
-			if first > second {
-				start = second
-				end = first
-			} else {
-				start = first
-				end = second
-			}
 
-			for y := start; y <= end; y++ {
-				diagram[y][baseX]++
-			}
-		} else {
-			fmt.Println("Diagonal lines are not implemented yet!")
-		}
+		x1, _ := strconv.Atoi(n[0])
+		x2, _ := strconv.Atoi(n[2])
+		y1, _ := strconv.Atoi(n[1])
+		y2, _ := strconv.Atoi(n[3])
 
-		// PrintDiagram(diagram)
+		xInst := GetInstructions(x1, x2)
+		yInst := GetInstructions(y1, y2)
+		diagram = ApplyInstructions(diagram, xInst, yInst, x1, x2, y1, y2)
 	}
 
 	return diagram
@@ -96,7 +157,8 @@ func main() {
 	}
 
 	diagram := BuildDynamicDiagram(1000)
-	diagram = AddInputToDiagram(tokens, diagram)
+	diagram = AddInputsToDiagram(tokens, diagram)
 	overlaps := NumberOfOverlappingPoints(diagram)
+	// PrintDiagram(diagram)
 	fmt.Printf("\nTwo lines overlap on %d points.\n", overlaps)
 }
