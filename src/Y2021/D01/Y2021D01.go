@@ -1,10 +1,12 @@
-package Y2021D01
+package main
 
 import (
-	"github.com/gusluchetti/advent-of-code/utils"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
+
+	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 func GetDepthIncreases(depthArray []int) int {
@@ -27,9 +29,12 @@ func GetSections(depthArray []int) []int {
 		return sectionsArray
 }
 
-func Y2021D01() {
+func main() {
 	// FIXME: actually validate parse input is working
-	tokens := utils.ParseInput("Y2021D01_input.txt")
+	path, err := os.Getwd()
+	utils.Check(err)
+	tokens := utils.ParseInput(path+"/src/Y2021/D01/Y2021D01_input.txt")
+
 	var depthArray []int
 	for _, token := range tokens {
 		depth, err := strconv.Atoi(token)
@@ -40,9 +45,9 @@ func Y2021D01() {
 	}
 
 	counter := GetDepthIncreases(depthArray)
-	fmt.Println("Number of times depth increased: " + strconv.Itoa(counter))
+	fmt.Println("Part 1 Solution (Number of times depth increased): " + strconv.Itoa(counter))
 
 	sectionsArray := GetSections(depthArray)
 	counter = GetDepthIncreases(sectionsArray)
-	fmt.Println("Number of times depth increased (on sections): " + strconv.Itoa(counter))
+	fmt.Println("Part 2 Solution (Number of times depth increased in sections of 3): " + strconv.Itoa(counter))
 }

@@ -1,4 +1,4 @@
-package Y2021D01
+package main
 
 import (
 	"fmt"
