@@ -1,11 +1,10 @@
-package main
+package Y2021D01
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
+	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 func GetDepthIncreases(depthArray []int) int {
@@ -29,17 +28,8 @@ func GetSections(depthArray []int) []int {
 }
 
 func main() {
-	file, err := os.Open("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	scanner := bufio.NewScanner(file)
-	
-	var tokens []string
-	for scanner.Scan() {
-		tokens = append(tokens, scanner.Text())
-	}
-	
+	// FIXME: actually validate parse input is working
+	tokens := utils.ParseInput("Y2021D01_input.txt")
 	var depthArray []int
 	for _, token := range tokens {
 		depth, err := strconv.Atoi(token)
