@@ -1,3 +1,3 @@
-module github.com/gusluchetti/advent-of-code-2021
+module github.com/gusluchetti/advent-of-code
 
 go 1.16
