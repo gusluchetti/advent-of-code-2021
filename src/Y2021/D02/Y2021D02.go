@@ -1,12 +1,13 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 func ReturnCommands(tokens []string) int{
@@ -57,17 +58,9 @@ func ReturnCommandsWithAim(tokens []string) int {
 }
 
 func main() {
-	file, err := os.Open("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	scanner := bufio.NewScanner(file)
-	
-	var tokens []string
-	for scanner.Scan() {
-		tokens = append(tokens, scanner.Text())
-	}
-	
+	path, err := os.Getwd()
+	utils.Check(err)
+	tokens := utils.ParseInput(path+"/src/Y2021/D01/Y2021D01_input.txt")
 	res1 := ReturnCommands(tokens)
 	res2 := ReturnCommandsWithAim(tokens)
 	fmt.Println("Horizontal position and depth coordinates multiplied: " + strconv.Itoa(res1))

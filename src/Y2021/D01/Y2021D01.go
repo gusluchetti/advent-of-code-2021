@@ -29,8 +29,7 @@ func GetSections(depthArray []int) []int {
 		return sectionsArray
 }
 
-func main() {
-	// FIXME: actually validate parse input is working
+func setup() []int {
 	path, err := os.Getwd()
 	utils.Check(err)
 	tokens := utils.ParseInput(path+"/src/Y2021/D01/Y2021D01_input.txt")
@@ -44,9 +43,19 @@ func main() {
 		depthArray = append(depthArray, depth)
 	}
 
+	return depthArray
+}
+
+// any other file can call this and get the first or the second solution
+func PartOne() {
+	depthArray := setup()
 	counter := GetDepthIncreases(depthArray)
 	fmt.Println("Part 1 Solution (Number of times depth increased): " + strconv.Itoa(counter))
+}
 
+func PartTwo() {
+	depthArray := setup()
+	counter := GetDepthIncreases(depthArray)
 	sectionsArray := GetSections(depthArray)
 	counter = GetDepthIncreases(sectionsArray)
 	fmt.Println("Part 2 Solution (Number of times depth increased in sections of 3): " + strconv.Itoa(counter))
