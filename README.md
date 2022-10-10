@@ -4,10 +4,15 @@ I will also try and use this as a way to get to know different languages.
 ## Project Structure
 Yearly folders are organized as such:
 ```
-+-- Y0000
-    +-- D00
-    |    +--- go.mod
-    |    +--- input.txt
-    |    +--- main.go
-    |    +--- main_test.go
++-- Y2020
+|    +-- D01
+|    |    +--- go.mod
+|    |    +--- input.txt
+|    |    +--- main.go
+|    |    +--- main_test.go
+|     +-- (...)
++-- Y2021
+.
+.
+.
 ```
