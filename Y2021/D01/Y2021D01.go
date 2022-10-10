@@ -27,7 +27,7 @@ func GetSections(depthArray []int) []int {
 		return sectionsArray
 }
 
-func main() {
+func Y2021D01() {
 	// FIXME: actually validate parse input is working
 	tokens := utils.ParseInput("Y2021D01_input.txt")
 	var depthArray []int
