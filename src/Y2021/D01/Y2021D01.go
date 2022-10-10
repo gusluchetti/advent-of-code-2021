@@ -1,10 +1,10 @@
 package Y2021D01
 
 import (
+	"github.com/gusluchetti/advent-of-code/utils"
 	"fmt"
 	"log"
 	"strconv"
-	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 func GetDepthIncreases(depthArray []int) int {
