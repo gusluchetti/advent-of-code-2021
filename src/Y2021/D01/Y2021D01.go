@@ -1,4 +1,4 @@
-package Y2021D01
+package main
 
 import (
 	"fmt"
@@ -59,4 +59,9 @@ func PartTwo() {
 	sectionsArray := GetSections(depthArray)
 	counter = GetDepthIncreases(sectionsArray)
 	fmt.Println("Part 2 Solution (Number of times depth increased in sections of 3): " + strconv.Itoa(counter))
+}
+
+func main() {
+	PartOne()
+	PartTwo()
 }

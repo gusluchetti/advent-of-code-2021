@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 
 	utils "github.com/gusluchetti/advent-of-code/utils"
 )
@@ -13,7 +14,6 @@ import (
 type info struct {
 	year int
 	day int
-	part int
 	tail []string
 }
 
@@ -25,18 +25,13 @@ func LoadAllInputs() {
 	}
 }
 
-func GetSolution(path string, part int) {
-	fmt.Printf("\n%s -> %d", path, part)
-	if part == 3 {
-		// run Y2021D01.PartOne()
-		// run Y2021D01.PartTwo()
-	} else {
-		// run Y2021D01.PartX()
-	}
-
+func GetDaySolutions(path string) {
+	fmt.Printf("\n%s", path)
+	cmd := exec.Command("go", "run", path)
+	fmt.Printf("\n%s", cmd)
 }
 
-func GetSolutions(info info) {
+func GetAllSolutions(info info) {
 	fmt.Print("Starting to get solutions...")
 	years := [7]int{2015, 2016, 2017, 2018, 2019, 2020, 2021}
 	for year:=years[0]; year<=years[len(years)-1]; year++{
@@ -53,14 +48,9 @@ func GetSolutions(info info) {
 			path, err := os.Getwd()
 			utils.Check(err)
 			targetDir := fmt.Sprintf("%s/src/Y%d/D%02d", path, info.year, info.day)
-			targetFile := utils.GetTargetFile(targetDir, info.year, info.day)
+			targetFile := utils.GetTargetFile(targetDir, info.year, info.day) + ".go"
 
-			switch info.part {
-			case 3:
-				GetSolution(targetFile, 3)
-			default:
-				GetSolution(targetFile, info.part)
-			}
+			GetDaySolutions(targetFile)
 		}
 	}
 }
@@ -75,8 +65,6 @@ func ParseFlags() (info, error) {
 	flag.IntVar(&year, "y", 0, "year as YYYY")
 	day := 0
 	flag.IntVar(&day, "d", 0, "day as (zero padded) DD")
-	part := 3
-	flag.IntVar(&part, "p", 3, "single (1 or 2) or both (3) parts")
 	flag.Parse()
 
 	if year >= 2022 {
@@ -85,18 +73,14 @@ func ParseFlags() (info, error) {
 	if day < 1 || day > 25 {
 		return info{}, errors.New("Invalid day! (Should be between 1 and 25)")
 	}
-	if part < 1 || part > 3 {
-		return info{}, errors.New("Invalid part! (Can be either 1, 2 or 3)")
-	}
 
 	fmt.Println("Printing all flags")
-	fmt.Println(year, day, part, flag.Args())
+	fmt.Println(year, day, flag.Args())
 	tail := flag.Args()
 
 	return info{
 		year: year,
 		day: day,
-		part: part,
 		tail: tail,
 	}, nil
 }
@@ -111,7 +95,7 @@ func main() {
 	}
 
 	if info.tail[0] == "solve" {
-		GetSolutions(info)
+		GetAllSolutions(info)
 	} else if info.tail[0] == "progress"{
 		GetProgress()
 	}
