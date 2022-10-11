@@ -4,8 +4,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
+	"os"
 
-	"github.com/gusluchetti/advent-of-code/utils"
+	aoc "github.com/gusluchetti/advent-of-code"
 )
 
 type info struct {
@@ -19,46 +21,52 @@ func LoadAllInputs() {
 	// loading all possible inputs
 	years := [7]int{2015, 2016, 2017, 2018, 2019, 2020, 2021}
 	for _, y := range years {
-		utils.DumpInput(y)
+		aoc.utils.DumpInput(y)
 	}
 }
 
-func GetSolution(part int) {
+func GetSolution(path string, part int) {
+	fmt.Printf("\n%s -- Part %d", path, part)
 	if part == 3 {
-		GetSolution(1)
-		GetSolution(2)
+		// run Y2021D01.PartOne()
+		// run Y2021D01.PartTwo()
 	} else {
-		GetSolution(part)
+		// run Y2021D01.PartX()
 	}
+
 }
 
 func GetSolutions(info info) {
+	fmt.Print("Starting to get solutions...")
 	years := [7]int{2015, 2016, 2017, 2018, 2019, 2020, 2021}
-	for year:=years[0]; year<years[len(years)-1]; year++{
+	for year:=years[0]; year<=years[len(years)-1]; year++{
 		if info.year != 0 && info.year != year {
 			continue
 		}
-		fmt.Printf("\n-YEAR %d", info.year)
+		fmt.Printf("\n- YEAR %d -", info.year)
 		for day:=1; day<=25; day++ {
 			if info.day != 0 && info.day != day {
 				continue
 			}
-			// main_dir/src/YEAR/DAY/YEARDAY.go, run one or both solution
-			fmt.Printf("\n>DAY %02d", info.day)
+			fmt.Printf("\n# DAY %02d", info.day)
+
+			path, err := os.Getwd()
+			utils.Check(err)
+			targetDir := fmt.Sprintf("%s/src/Y%d/D%02d", path, info.year, info.day)
+			targetFile := utils.GetTargetFile(targetDir, info.year, info.day)
+
 			switch info.part {
 			case 3:
-				GetSolution(3)
+				GetSolution(targetFile, 3)
 			default:
-				GetSolution(info.part)
+				GetSolution(targetFile, info.part)
 			}
 		}
 	}
-
-
-	fmt.Print("solution")
 }
 
 func GetProgress() {
+	// TODO: implement progress status
 	fmt.Print("progress")
 }
 
@@ -99,7 +107,7 @@ func main() {
 
 	info, err := ParseFlags()
 	if err != nil {
-
+		log.Fatal(err)
 	}
 
 	if info.tail[0] == "solve" {
