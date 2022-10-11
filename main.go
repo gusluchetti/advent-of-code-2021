@@ -26,7 +26,6 @@ func LoadAllInputs() {
 }
 
 func GetDaySolutions(path string) {
-	fmt.Printf("\n%s", path)
 	cmd := exec.Command("go", "run", path)
 	fmt.Printf("\n%s", cmd)
 }
@@ -38,19 +37,23 @@ func GetAllSolutions(info info) {
 		if info.year != 0 && info.year != year {
 			continue
 		}
-		fmt.Printf("\n- YEAR %d -", info.year)
+		fmt.Printf("\n- YEAR %d -", year)
 		for day:=1; day<=25; day++ {
 			if info.day != 0 && info.day != day {
 				continue
 			}
-			fmt.Printf("\n# DAY %02d", info.day)
 
 			path, err := os.Getwd()
 			utils.Check(err)
-			targetDir := fmt.Sprintf("%s/src/Y%d/D%02d", path, info.year, info.day)
-			targetFile := utils.GetTargetFile(targetDir, info.year, info.day) + ".go"
+			targetDir := fmt.Sprintf("%s/src/Y%d/D%02d", path, year, day)
+			targetFile := utils.GetTargetFile(targetDir, year, day) + ".go"
 
-			GetDaySolutions(targetFile)
+			if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+				fmt.Printf("\nNo solutions for day %d", day)
+			} else {
+				fmt.Printf("\n# DAY %02d", day)
+				GetDaySolutions(targetFile)
+			}
 		}
 	}
 }
@@ -67,10 +70,10 @@ func ParseFlags() (info, error) {
 	flag.IntVar(&day, "d", 0, "day as (zero padded) DD")
 	flag.Parse()
 
-	if year >= 2022 {
+	if  year > 2021 || (year < 2015 && year != 0) {
 		return info{}, errors.New("Invalid year!")
 	}
-	if day < 1 || day > 25 {
+	if  day > 25 || (day < 1 && day != 0) {
 		return info{}, errors.New("Invalid day! (Should be between 1 and 25)")
 	}
 

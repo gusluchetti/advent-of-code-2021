@@ -1,4 +1,4 @@
-package Y2021D03
+package main
 
 import (
 	"bufio"
