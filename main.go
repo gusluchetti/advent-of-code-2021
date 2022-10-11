@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	aoc "github.com/gusluchetti/advent-of-code"
+	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 type info struct {
@@ -21,7 +21,7 @@ func LoadAllInputs() {
 	// loading all possible inputs
 	years := [7]int{2015, 2016, 2017, 2018, 2019, 2020, 2021}
 	for _, y := range years {
-		aoc.utils.DumpInput(y)
+		utils.DumpInput(y)
 	}
 }
 
