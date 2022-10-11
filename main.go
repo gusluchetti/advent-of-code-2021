@@ -26,7 +26,7 @@ func LoadAllInputs() {
 }
 
 func GetSolution(path string, part int) {
-	fmt.Printf("\n%s -- Part %d", path, part)
+	fmt.Printf("\n%s -> %d", path, part)
 	if part == 3 {
 		// run Y2021D01.PartOne()
 		// run Y2021D01.PartTwo()
