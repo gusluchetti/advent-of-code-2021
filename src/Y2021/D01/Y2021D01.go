@@ -47,14 +47,12 @@ func setup() []int {
 }
 
 // any other file can call this and get the first or the second solution
-func PartOne() {
-	depthArray := setup()
+func PartOne(depthArray []int) {
 	counter := GetDepthIncreases(depthArray)
 	fmt.Println("Part 1 Solution (Number of times depth increased): " + strconv.Itoa(counter))
 }
 
-func PartTwo() {
-	depthArray := setup()
+func PartTwo(depthArray []int) {
 	counter := GetDepthIncreases(depthArray)
 	sectionsArray := GetSections(depthArray)
 	counter = GetDepthIncreases(sectionsArray)
@@ -62,6 +60,7 @@ func PartTwo() {
 }
 
 func main() {
-	PartOne()
-	PartTwo()
+	depthArray := setup()
+	PartOne(depthArray)
+	PartTwo(depthArray)
 }

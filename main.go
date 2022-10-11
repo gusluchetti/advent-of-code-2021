@@ -27,7 +27,9 @@ func LoadAllInputs() {
 
 func GetDaySolutions(path string) {
 	cmd := exec.Command("go", "run", path)
-	fmt.Printf("\n%s", cmd)
+	output, err := cmd.CombinedOutput()
+	utils.Check(err)
+	fmt.Printf("\n%s", string(output))
 }
 
 func GetAllSolutions(info info) {
@@ -48,8 +50,8 @@ func GetAllSolutions(info info) {
 			targetDir := fmt.Sprintf("%s/src/Y%d/D%02d", path, year, day)
 			targetFile := utils.GetTargetFile(targetDir, year, day) + ".go"
 
-			if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-				fmt.Printf("\nNo solutions for day %d", day)
+			if _, err := os.Stat(targetFile); errors.Is(err, os.ErrNotExist) {
+				// fmt.Printf("\nNo solutions for day %d", day)
 			} else {
 				fmt.Printf("\n# DAY %02d", day)
 				GetDaySolutions(targetFile)

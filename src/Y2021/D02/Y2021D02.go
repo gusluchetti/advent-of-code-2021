@@ -57,12 +57,24 @@ func ReturnCommandsWithAim(tokens []string) int {
 	return commands[0] * commands[1]
 }
 
-func main() {
+func setup() []string {
 	path, err := os.Getwd()
 	utils.Check(err)
-	tokens := utils.ParseInput(path+"/src/Y2021/D01/Y2021D01_input.txt")
+	return utils.ParseInput(path+"/src/Y2021/D02/Y2021D02_input.txt")
+}
+
+func PartOne(tokens []string) {
 	res1 := ReturnCommands(tokens)
-	res2 := ReturnCommandsWithAim(tokens)
 	fmt.Println("Horizontal position and depth coordinates multiplied: " + strconv.Itoa(res1))
+}
+
+func PartTwo(tokens []string) {
+	res2 := ReturnCommandsWithAim(tokens)
 	fmt.Println("Same as above, but considering new aim variable: " + strconv.Itoa(res2))
+}
+
+func main() {
+	tokens := setup()
+	PartOne(tokens)
+	PartTwo(tokens)
 }
