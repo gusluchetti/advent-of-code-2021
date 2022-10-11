@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -75,6 +76,8 @@ func TestTwo (t * testing.T) {
 
 func main() {
 	depthArray := setup()
-	PartOne(depthArray)
-	PartTwo(depthArray)
+	partOne := PartOne(depthArray)
+	fmt.Println(partOne)
+	partTwo := PartTwo(depthArray)
+	fmt.Println(partTwo)
 }

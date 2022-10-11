@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"testing"
 
 	"github.com/gusluchetti/advent-of-code/utils"
 )
@@ -63,18 +64,34 @@ func setup() []string {
 	return utils.ParseInput(path+"/src/Y2021/D02/Y2021D02_input.txt")
 }
 
-func PartOne(tokens []string) {
-	res1 := ReturnCommands(tokens)
-	fmt.Println("Horizontal position and depth coordinates multiplied: " + strconv.Itoa(res1))
+func PartOne(tokens []string) int {
+	return ReturnCommands(tokens)
 }
 
-func PartTwo(tokens []string) {
-	res2 := ReturnCommandsWithAim(tokens)
-	fmt.Println("Same as above, but considering new aim variable: " + strconv.Itoa(res2))
+func TestOne (t * testing.T) {
+	testArray := []string{"forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"}
+	result := PartOne(testArray)
+	if result != 150 {
+		t.Errorf("Counter was incorrect, go: %d, want: %d", result, 150)
+	}
+}
+
+func PartTwo(tokens []string) int {
+	return ReturnCommandsWithAim(tokens)
+}
+
+func TestCommandsWithAim (t * testing.T) {
+	testArray := []string{"forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"}
+	result := PartTwo(testArray)
+	if result != 900 {
+		t.Errorf("Counter was incorrect, go: %d, want: %d", result, 900)
+	}
 }
 
 func main() {
 	tokens := setup()
-	PartOne(tokens)
-	PartTwo(tokens)
+	partOne := PartOne(tokens)
+	fmt.Println(partOne)
+	partTwo := PartTwo(tokens)
+	fmt.Println(partTwo)
 }
