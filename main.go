@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/gusluchetti/advent-of-code/utils"
+	utils "github.com/gusluchetti/advent-of-code/utils"
 )
 
 type info struct {

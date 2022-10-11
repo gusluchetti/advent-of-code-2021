@@ -1,4 +1,4 @@
-package main
+package Y2021D04
 
 import (
 	"testing"
