@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"testing"
 
 	"github.com/gusluchetti/advent-of-code/utils"
 )
@@ -46,17 +46,31 @@ func setup() []int {
 	return depthArray
 }
 
-// any other file can call this and get the first or the second solution
-func PartOne(depthArray []int) {
+func PartOne(depthArray []int) int {
 	counter := GetDepthIncreases(depthArray)
-	fmt.Println("Part 1 Solution (Number of times depth increased): " + strconv.Itoa(counter))
+	return counter
 }
 
-func PartTwo(depthArray []int) {
-	counter := GetDepthIncreases(depthArray)
+func TestOne (t * testing.T) {
+	testArray := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	counter := PartOne(testArray)
+	if counter != 7 {
+		t.Errorf("Counter was incorrect, got: %d, expected: %d", counter, 7)
+	}
+}
+
+func PartTwo(depthArray []int) int {
 	sectionsArray := GetSections(depthArray)
-	counter = GetDepthIncreases(sectionsArray)
-	fmt.Println("Part 2 Solution (Number of times depth increased in sections of 3): " + strconv.Itoa(counter))
+	counter := GetDepthIncreases(sectionsArray)
+	return counter
+}
+
+func TestTwo (t * testing.T) {
+	testArray := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	counter := PartTwo(testArray)
+	if counter != 5 {
+		t.Errorf("Counter was incorrect, got: %d, expected: %d", counter, 5)
+	}
 }
 
 func main() {
