@@ -1,10 +1,13 @@
-package Y2021D01
+package main
 
 import (
-	"github.com/gusluchetti/advent-of-code/utils"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
+	"testing"
+
+	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 func GetDepthIncreases(depthArray []int) int {
@@ -27,9 +30,11 @@ func GetSections(depthArray []int) []int {
 		return sectionsArray
 }
 
-func Y2021D01() {
-	// FIXME: actually validate parse input is working
-	tokens := utils.ParseInput("Y2021D01_input.txt")
+func setup() []int {
+	path, err := os.Getwd()
+	utils.Check(err)
+	tokens := utils.ParseInput(path+"/src/Y2021/D01/Y2021D01_input.txt")
+
 	var depthArray []int
 	for _, token := range tokens {
 		depth, err := strconv.Atoi(token)
@@ -39,10 +44,40 @@ func Y2021D01() {
 		depthArray = append(depthArray, depth)
 	}
 
-	counter := GetDepthIncreases(depthArray)
-	fmt.Println("Number of times depth increased: " + strconv.Itoa(counter))
+	return depthArray
+}
 
+func PartOne(depthArray []int) int {
+	counter := GetDepthIncreases(depthArray)
+	return counter
+}
+
+func TestOne (t * testing.T) {
+	testArray := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	counter := PartOne(testArray)
+	if counter != 7 {
+		t.Errorf("Counter was incorrect, got: %d, expected: %d", counter, 7)
+	}
+}
+
+func PartTwo(depthArray []int) int {
 	sectionsArray := GetSections(depthArray)
-	counter = GetDepthIncreases(sectionsArray)
-	fmt.Println("Number of times depth increased (on sections): " + strconv.Itoa(counter))
+	counter := GetDepthIncreases(sectionsArray)
+	return counter
+}
+
+func TestTwo (t * testing.T) {
+	testArray := []int{199, 200, 208, 210, 200, 207, 240, 269, 260, 263}
+	counter := PartTwo(testArray)
+	if counter != 5 {
+		t.Errorf("Counter was incorrect, got: %d, expected: %d", counter, 5)
+	}
+}
+
+func main() {
+	depthArray := setup()
+	partOne := PartOne(depthArray)
+	fmt.Println(partOne)
+	partTwo := PartTwo(depthArray)
+	fmt.Println(partTwo)
 }

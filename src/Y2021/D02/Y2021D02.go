@@ -1,12 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+	"testing"
+
+	"github.com/gusluchetti/advent-of-code/utils"
 )
 
 func ReturnCommands(tokens []string) int{
@@ -56,20 +58,40 @@ func ReturnCommandsWithAim(tokens []string) int {
 	return commands[0] * commands[1]
 }
 
+func setup() []string {
+	path, err := os.Getwd()
+	utils.Check(err)
+	return utils.ParseInput(path+"/src/Y2021/D02/Y2021D02_input.txt")
+}
+
+func PartOne(tokens []string) int {
+	return ReturnCommands(tokens)
+}
+
+func TestOne (t * testing.T) {
+	testArray := []string{"forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"}
+	result := PartOne(testArray)
+	if result != 150 {
+		t.Errorf("Counter was incorrect, go: %d, want: %d", result, 150)
+	}
+}
+
+func PartTwo(tokens []string) int {
+	return ReturnCommandsWithAim(tokens)
+}
+
+func TestCommandsWithAim (t * testing.T) {
+	testArray := []string{"forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"}
+	result := PartTwo(testArray)
+	if result != 900 {
+		t.Errorf("Counter was incorrect, go: %d, want: %d", result, 900)
+	}
+}
+
 func main() {
-	file, err := os.Open("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	scanner := bufio.NewScanner(file)
-	
-	var tokens []string
-	for scanner.Scan() {
-		tokens = append(tokens, scanner.Text())
-	}
-	
-	res1 := ReturnCommands(tokens)
-	res2 := ReturnCommandsWithAim(tokens)
-	fmt.Println("Horizontal position and depth coordinates multiplied: " + strconv.Itoa(res1))
-	fmt.Println("Same as above, but considering new aim variable: " + strconv.Itoa(res2))
+	tokens := setup()
+	partOne := PartOne(tokens)
+	fmt.Println(partOne)
+	partTwo := PartTwo(tokens)
+	fmt.Println(partTwo)
 }
