@@ -10,38 +10,40 @@ import (
 	"github.com/gusluchetti/advent-of-code/utils"
 )
 
-func removeCandidate(curIndex int, fishMatrix [][]int) [][]int{
-	fmt.Printf("\nFirst item %v was deleted\n", fishMatrix[curIndex])
-	fishMatrix = fishMatrix[1:]
+// exponential growth formula
+// y = a(1+r)^t
+// a: initial value, r: rate of change
+// t: time
 
-	return fishMatrix
-}
-
-func SmartFishSim(fish []int, days int, firstSpawnAge int, respawnAge int) int {
-	fishMatrix := [][]int{}
+func SmartFishSim(fish []int, days int, lifespan int, respawnAge int) int {
+	fishPerDay := make([]int, lifespan)
 	for _, f := range fish {
-		fishy := []int{f, days}
-		fishMatrix = append(fishMatrix, fishy)
+		fishPerDay[f]++
+	}
+	fmt.Printf("\nInitial fish state: %v", fishPerDay)
+
+	last := len(fishPerDay)-1
+	secondLast := last-1
+
+	for i:=0;i<days;i++{
+		fmt.Printf("\nDay %d ", i)
+		newFish := 0
+		for j:=0;j<last;j++ {
+			if j == 0 && fishPerDay[j] != 0 {
+				newFish = fishPerDay[j]
+			}
+			if j <= secondLast {
+				fishPerDay[j] = fishPerDay[j+1]
+			}
+		}
+		fishPerDay[respawnAge] += newFish
+		fishPerDay[last] = newFish
+		fmt.Printf("\nEnd of day status: %v", fishPerDay)
 	}
 
 	sum := 0
-	for len(fishMatrix) > 0 {
-		fmt.Printf("\nCurrent Sum: %d", sum)
-		fmt.Printf("\nStart: %v", fishMatrix)
-		i := 0
-		// generate items that this item generates
-		sub := fishMatrix[i][0] + 1
-		remainder := fishMatrix[i][1]-sub
-		rr := remainder - (respawnAge+1)
-		for rr >= -1 {
-			new := []int{firstSpawnAge, rr}
-			fishMatrix = append(fishMatrix, new)
-			fmt.Printf("\nGenerated new candidate %v", new)
-			rr = rr - (respawnAge+1)
-		}
-		// item is removed when it can no longer generate
-		fishMatrix = removeCandidate(i, fishMatrix)
-		sum += 1
+	for _, fish := range fishPerDay {
+		sum += fish
 	}
 	return sum
 }
@@ -80,9 +82,9 @@ func main() {
 		fish = append(fish, num)
 	}
 
-	firstSpawnAge := 8
-	respawnAge := 6
+	lifespan := 9 // 8 to 0 days
+	respawnAge := 6 // respawns with 6 days
 	// _ = DumbFishSim([]int{3, 2}, days) //3,2, 20 days, 14
-	sum := SmartFishSim([]int{3, 4, 3, 1, 2}, 18, firstSpawnAge, respawnAge)
+	sum := SmartFishSim(fish, 256, lifespan, respawnAge)
 	fmt.Printf("\n\nTotal fish population is %d", sum)
 }
