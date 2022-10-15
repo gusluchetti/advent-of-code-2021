@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"math"
-	"math/rand"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -13,20 +13,20 @@ import (
 )
 
 func closestToAll(crabs []int) int {
-	lastIndex := len(crabs)-1
-	initPoint := crabs[rand.Intn(lastIndex + 1)]
-
-	var bestCost float64 = float64(math.MaxUint)
-	var cost float64 = 0
-	for i:=0;i<lastIndex;i++ {
-		distance := float64(initPoint - crabs[i])
-		cost += math.Abs(distance)
+	// median is closest to all
+	sort.Ints(crabs)
+	fmt.Printf("\nSorted crabs: %v", crabs)
+	midIndex := (len(crabs)-1)/2
+	fuel := 0
+	for _, c := range crabs {
+		midCrab := crabs[midIndex]
+		// fmt.Printf("\nMid crab is %d", midIndex)
+		fuel += int(math.Abs(float64(midCrab - c)))
+		fmt.Printf("\nCost for %d to go to %d: %d", c, midCrab, fuel)
 	}
-	if cost < bestCost {
-		bestCost = cost
-	}
+	fmt.Printf("\nTotal fuel cost: %d", fuel)
 
-	return int(bestCost)
+	return fuel
 }
 
 func main() {
@@ -51,6 +51,9 @@ func main() {
 	testCrabs := []int{16,1,2,0,4,2,7,1,2,14}
 	leastFuel := closestToAll(testCrabs)
 	if leastFuel == 37 {
-		fmt.Println("OK")
+		fmt.Println("\nOK!")
+
+		leastFuel = closestToAll(crabs)
+		fmt.Println(leastFuel)
 	}
 }
