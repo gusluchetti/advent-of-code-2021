@@ -89,16 +89,12 @@ func main() {
 	}
 }
 
-// For one, you totally can use the naive solution and it works.
-// To make it run fast at non-tiny inputs, find a formula to determine
-// how much fuel it'll take for a given crab to reach a given distance.
-// binary search? how?
-// To make it run fast at larger inputs, run your (now working!) program
-// and print out the fuel cost at a bunch of different destinations, and
-// optionally custom inputs too. You should notice that the value is
-// concave up, and so you can use binary search on it.
-// math!!!
-// To make it run fast at a very large input, when you tested those custom inputs
-// earlier, you might have noticed that for small inputs, the part 1 destination
-// is just the median, and the part 2 destination is close to the mean.
+// from what i've gathered online
+// median for constant fuel makes sense, literal mid point of all points
+// mean for ever-increasing fuel didn't make sense, if I could plot out the graph
+// of fuel cost, that should make more sense (graph is concave up)
+// how does binary search come into this?
+//
+// reddit comment - the part 1 destination is just the median,
+// and the part 2 destination is close to the mean.
 // Can you use math to show that this is true in general?
