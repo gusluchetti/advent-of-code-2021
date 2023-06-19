@@ -8,6 +8,8 @@ use std::fs::File;
 
 pub fn parse_input(path: String, separator: &str) -> io::Result<()> {
     let mut file = File::open(path)?;
+    let mut lines: Vec<String> = Vec::new();
+    // let new_line: u8 = '\n' as u8;
 
     match separator {
         "none" => {
@@ -20,10 +22,12 @@ pub fn parse_input(path: String, separator: &str) -> io::Result<()> {
             file.read_to_end(&mut input)?;
             println!("{:?}", input);
             for (i, b) in input.iter().enumerate() {
-                let byte: u8 = '\n' as u8;
-                if &byte == b {
-                    println!("{b} is line end!");
-                    println!("{} is last before?", input[i-1]);
+                let mut last_cr: usize = 0;
+                let cr: u8 = '\r' as u8;
+                if &cr == b {
+                    lines.push(input[last_cr..i-1])
+                    println!("last CR at index {last_cr}")
+                    last_cr = i;
                 }
             }
         },
