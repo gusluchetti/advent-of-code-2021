@@ -1,6 +1,4 @@
-use std::{io, io::prelude::*};
-use std::fs::File;
-use crate::utils::parse_input as parse_input;
+use utils::parse_input::Method;
 
 fn main() -> io::Result<()> {
     let mut file = File::open("input.txt")?;
